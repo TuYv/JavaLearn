@@ -32,7 +32,7 @@ public class BIOServer {
                     System.out.println("收到id为" + socket.hashCode() + " " + inputContent);
                     count++;
                 }
-                System.out.println("id为" + socket.hashCode() + "的Clientsocket " + DateUtils.stringNowTime() + "读取结束");
+                System.out.println("id为" + socket.hashCode() + "的ClientSocket " + DateUtils.stringNowTime() + "读取结束");
             }
         } catch (IOException e) {
             e.printStackTrace();
