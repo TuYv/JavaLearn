@@ -1,4 +1,4 @@
-package com.max.learning.design_pattern.realizatype;
+package com.max.learning.design_pattern.create.realizatype;
 
 /**
  * 原型模式

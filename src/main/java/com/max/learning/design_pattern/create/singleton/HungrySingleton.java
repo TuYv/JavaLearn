@@ -1,4 +1,4 @@
-package com.max.learning.design_pattern.singleton;
+package com.max.learning.design_pattern.create.singleton;
 
 /**
  * 饿汉式单例模式
