@@ -39,10 +39,10 @@ public class HashMap<K,V> {
     void set(K key, V value) {
         int hash;
         Node node;
-        // todo 是否需要resize Map
-        //判断是否是空节点
+        // todo 判断是否需要resize Map
+        // 判断是否是空节点
         if(tables[(hash = hash(key)) & (this.length - 1)] == null)
-            tables[(hash = hash(key)) & (this.length - 1)] = setNode(hash, key,value);
+            tables[hash] = setNode(hash, key,value);
         else {
             node = tables[(hash = hash(key)) & (this.length - 1)];
             if(node != null)
@@ -50,6 +50,24 @@ public class HashMap<K,V> {
             node = setNode(hash,key,value);
         }
     }
+
+    V get(K key) {
+        int hash = hash(key);
+        Node node;
+        if((node = tables[hash * (this.length - 1)]) != null) {
+            if(hash == node.getHash() && key.equals(node.getKey())) {
+                return (V) node.getValue();
+            } else {
+                while((node = node.next) != null  && key.equals(node.getKey())) {
+                    if(hash == node.hash) {
+                        return (V) node.getValue();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     int hash(Object key) {
         //定义变量减少一次hashcode计算
         int h;
