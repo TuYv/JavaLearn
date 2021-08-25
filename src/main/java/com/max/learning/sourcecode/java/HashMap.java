@@ -1,5 +1,6 @@
 package com.max.learning.sourcecode.java;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,26 +14,32 @@ import java.util.Set;
  * @date 2021/8/19 19:27
  */
 @Slf4j
-public class HashMap<K,V> implements Map<K,V>{
+public class HashMap<K, V> implements Map<K, V> {
     //默认 负载因子
     static final float DEFAULT_LOAD_FACTOR = 0.75f;
     //初始大小
     static final int DEFAULT_INITIAL_CAPACITY = 1 << 4;
     //最大容量
     static final int MAXIMUM_CAPACITY = 1 >>> 30;
+    //链表转树的阈值
+    static final int TREEIFY_THRESHOLD = 8;
     //长度
     int threshold;
     //负载因子
     final float loadFactor;
 
+    transient int size;
+    //修改次数
+    transient int modCount;
+
     @Override
     public int size() {
-        return 0;
+        return this.size;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return this.size == 0;
     }
 
     @Override
@@ -47,37 +54,77 @@ public class HashMap<K,V> implements Map<K,V>{
 
     @Override
     public V get(Object key) {
-        int hash = hash(key);
-        Node node;
-        if((node = tables[hash * (this.threshold - 1)]) != null) {
-            if(hash == node.getHash() && key.equals(node.getKey())) {
-                return (V) node.getValue();
-            } else {
-                while((node = node.next) != null  && key.equals(node.getKey())) {
-                    if(hash == node.hash) {
-                        return (V) node.getValue();
-                    }
-                }
+        Node<K, V>[] tab;
+        Node first, e;
+        int n, hash;
+        K k;
+        if ((tab = tables) != null && (n = tab.length) > 0 && (first = tab[(n - 1) & (hash = hash(key))]) != null) {
+            if (first.hash == hash && ((k = (K) first.key) == key) || (key != null && key.equals(k))) {
+                return (V) first.value;
             }
+            if ((e = first.next) != null) {
+                //todo treeNode 逻辑
+                do {
+                    if (e.hash == hash && ((k = (K) e.key) == key) || (key != null && key.equals(k))) {
+                        return (V) e.value;
+                    }
+                } while ((e = e.next) != null);
+            }
+
         }
         return null;
     }
 
     @Override
     public V put(K key, V value) {
-        int hash;
-        Node node;
-        // todo 判断是否需要resize Map
-        // 判断是否是空节点
-        if(tables[(hash = hash(key)) & (this.threshold - 1)] == null)
-            tables[hash] = setNode(hash, key,value);
-        else {
-            node = tables[(hash = hash(key)) & (this.threshold - 1)];
-            while(node != null)
-                node = node.next;
-            node = setNode(hash,key,value);
+        Node<K, V>[] tab;
+        Node<K, V> p;
+        int n, i, hash;
+        if ((tab = tables) == null && (n = tab.length) == 0) {
+            // todo 判断是否需要resize Map
         }
-        return value;
+        // 判断是否是空节点
+        if ((p = tab[i = (hash = hash(key)) & (n - 1)]) == null) {
+            tab[i] = newNode(hash, key, value, null);
+        } else {
+            Node<K, V> e;
+            K k;
+            //判断key是否一致
+            if (p.hash == hash && ((k = p.key) == key) || (key != null && key.equals(k))) {
+                e = p;
+            }
+            //todo 判断是否为树节点
+            //else if (p instanceof )
+            else {
+                for (int binCount = 0; ; ++binCount) {
+                    //如果节点是空 插入node
+                    if ((e = (p.next)) == null) {
+                        p.next = newNode(hash, key, value, null);
+                        if (binCount >= TREEIFY_THRESHOLD - 1) {
+                            //链表转树
+                        }
+                        break;
+                    }
+                    //判断key是否一致
+                    if (e.hash == hash && ((k = e.key) == key || (key != null && key.equals(k)))) {
+                        break;
+                    }
+                    p = e;
+                }
+            }
+            //上面的逻辑会使e p 都指向最后一个节点 但是不一定有写入新值
+            if (e != null) {
+                V oldValue = e.value;
+                //todo 根据参数 onlyIfAbsent 判断是否覆盖
+                e.value = value;
+                return oldValue;
+            }
+        }
+        ++modCount;
+        if(++size > threshold) {
+            //todo resize()map
+        }
+        return null;
     }
 
     @Override
@@ -112,17 +159,19 @@ public class HashMap<K,V> implements Map<K,V>{
 
     //node 节点
     @Data
-    static class Node<K,V> {
+    @AllArgsConstructor
+    static class Node<K, V> {
         int hash;
         K key;
         V value;
-        Node<K,V> next;
+        Node<K, V> next;
     }
+
     Node[] tables = null;
 
 
     public HashMap(int initialCapacity, float loadFactor) {
-        if(initialCapacity < 0) {
+        if (initialCapacity < 0) {
             log.error("初始化长度不能为负数: " + initialCapacity);
         }
         initialCapacity = Math.min(initialCapacity, MAXIMUM_CAPACITY);
@@ -133,26 +182,27 @@ public class HashMap<K,V> implements Map<K,V>{
         // 对于不是2的倍数的长度做SizeFor操作
         this.threshold = tableSizeFor(initialCapacity);
     }
-    public HashMap () {
-        this.loadFactor = DEFAULT_LOAD_FACTOR;;
+
+    public HashMap() {
+        this.loadFactor = DEFAULT_LOAD_FACTOR;
+        ;
     }
-    public HashMap (int initialCapacity) {
+
+    public HashMap(int initialCapacity) {
         this(initialCapacity, DEFAULT_LOAD_FACTOR);
     }
+
     int hash(Object key) {
         //定义变量减少一次hashcode计算
         int h;
         //使用扰动函数保证hash值更加的均匀
         return key == null ? 0 : (h = key.hashCode()) ^ (h >>> 16);
     }
-    Node setNode(int hash, K key, V value) {
-        Node node = new Node();
-        node.setHash(hash);
-        node.setKey(key);
-        node.setValue(value);
 
-        return node;
+    Node<K, V> newNode(int hash, K key, V value, Node<K, V> next) {
+        return new Node<>(hash, key, value, next);
     }
+
     int tableSizeFor(int cap) {
         int n = cap - 1;
         n |= n >>> 1;
@@ -160,11 +210,11 @@ public class HashMap<K,V> implements Map<K,V>{
         n |= n >>> 4;
         n |= n >>> 8;
         n |= n >>> 16;
-        return (n < 0) ? 1 :(n > MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
+        return (n < 0) ? 1 : (n > MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
     }
 
     public static void main(String[] args) {
-        Map<String, String > map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         System.out.println(map.size());
     }
 }
