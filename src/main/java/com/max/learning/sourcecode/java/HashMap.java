@@ -81,7 +81,8 @@ public class HashMap<K, V> implements Map<K, V> {
         Node<K, V> p;
         int n, i, hash;
         if ((tab = tables) == null && (n = tab.length) == 0) {
-            // todo 判断是否需要resize Map
+            //判断是否需要resize Map
+            n = (tab = resize()).length;
         }
         // 判断是否是空节点
         if ((p = tab[i = (hash = hash(key)) & (n - 1)]) == null) {
@@ -121,10 +122,97 @@ public class HashMap<K, V> implements Map<K, V> {
             }
         }
         ++modCount;
-        if(++size > threshold) {
-            //todo resize()map
+        if (++size > threshold) {
+            //resize()map
+            resize();
         }
         return null;
+    }
+
+    final Node<K, V>[] resize() {
+        //1.定义新的数组大小
+        Node<K, V>[] oldTab = tables;
+        int oldCap = (oldTab == null) ? 0 : oldTab.length;
+        int oldThr = threshold;
+        int newCap, newThr = 0;
+        if (oldCap > 0) {
+            //容量不能超过最大容量
+            if (oldCap >= MAXIMUM_CAPACITY) {
+                //讲阈值设置最大，不会再做resize操作
+                threshold = Integer.MAX_VALUE;
+                return oldTab;
+                //设置新的容量和新的阈值 翻倍
+            } else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY && oldCap >= DEFAULT_INITIAL_CAPACITY) {
+                newThr = oldThr << 1;
+            }
+            //之前容量为0 但有阈值 一般为第一次使用
+        } else if (oldThr > 0) {
+            //设置新容量为老阈值
+            newCap = oldThr;
+        }
+        //之前容量阈值都为空 重新初始化
+        else {
+            newCap = DEFAULT_INITIAL_CAPACITY;
+            newThr = (int) (DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);
+        }
+        //2.更新阈值
+        if (newThr == 0) {
+            //loadFactor 初始化时一定为定义
+            float ft = newCap * loadFactor;
+            newThr = newCap < MAXIMUM_CAPACITY && ft < MAXIMUM_CAPACITY ? (int) ft : Integer.MAX_VALUE;
+        }
+        threshold = newThr;
+        //3.重新分配
+        Node<K, V>[] newTab = new Node[newCap];
+        tables = newTab;
+        if (oldTab != null) {
+            for (int j = 0; j < oldCap; j++) {
+                Node<K, V> e;
+                if ((e = oldTab[j]) != null) {
+                    oldTab[j] = null;
+                    if (e.next == null) {
+                        newTab[e.hash & (newCap - 1)] = e;
+                        //} else if(e instanceof TreeNode)  todo 树节点
+                    } else {
+                        //不用动的链表
+                        Node<K, V> loHead = null, loTail = null;
+                        //新链表
+                        Node<K, V> hiHead = null, hiTail = null;
+                        Node<K, V> next = null;
+                        do {
+                            next = e.next;
+                            //巧妙的设计 hash 对比最高位 如果是1 就是新节点
+                            if((e.hash & oldCap) == 0) {
+                                if(loTail == null) {
+                                    loHead = e;
+                                }else {
+                                    loTail.next = e;
+                                }
+                                loTail = e;
+                            }else {
+                                if(hiTail == null) {
+                                    hiHead = e;
+                                } else {
+                                    hiTail.next = e;
+                                }
+                                hiTail = e;
+                            }
+                        } while ((e = next) != null);
+                        if (loTail != null) {
+                            loTail.next = null;
+                            newTab[j] = loHead;
+                        }
+                        if(hiTail != null) {
+                            hiTail.next = null;
+                            //巧妙地设计 因为是大小是翻倍的 所有新下标就是j + oldCap
+                            newTab[oldCap + j] = hiHead;
+                        }
+
+                    }
+                }
+            }
+        }
+        return newTab;
     }
 
     @Override
