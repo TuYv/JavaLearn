@@ -57,7 +57,7 @@ public class HashMap<K, V> implements Map<K, V> {
         Node<K, V>[] tab;
         Node first, e;
         int n, hash;
-        K k;
+        K k =  null;
         if ((tab = tables) != null && (n = tab.length) > 0 && (first = tab[(n - 1) & (hash = hash(key))]) != null) {
             if (first.hash == hash && ((k = (K) first.key) == key) || (key != null && key.equals(k))) {
                 return (V) first.value;
@@ -79,7 +79,7 @@ public class HashMap<K, V> implements Map<K, V> {
     public V put(K key, V value) {
         Node<K, V>[] tab;
         Node<K, V> p;
-        int n, i, hash;
+        int n = 0, i, hash;
         if ((tab = tables) == null && (n = tab.length) == 0) {
             //判断是否需要resize Map
             n = (tab = resize()).length;
@@ -89,7 +89,7 @@ public class HashMap<K, V> implements Map<K, V> {
             tab[i] = newNode(hash, key, value, null);
         } else {
             Node<K, V> e;
-            K k;
+            K k = null;
             //判断key是否一致
             if (p.hash == hash && ((k = p.key) == key) || (key != null && key.equals(k))) {
                 e = p;
@@ -232,7 +232,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public Set<K> keySet() {
-
+        return null;
     }
 
     @Override
