@@ -1,4 +1,4 @@
-package com.max.learning.design_pattern.create.factory.product;
+package com.max.design.create.factory.product;
 
 public class ConcreteProduct1 implements Product {
         @Override
