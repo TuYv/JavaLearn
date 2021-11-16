@@ -1,4 +1,4 @@
-package com.max.learning.design_pattern.refactoring;
+package com.max.design.refactoring;
 
 import static org.junit.jupiter.api.Assertions.*;
 
