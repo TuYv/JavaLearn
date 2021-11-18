@@ -13,9 +13,9 @@ import com.max.design.create.factory.bugstack.store.impl.GoodsCommodityService;
  **/
 public class StoreFactory {
     public ICommodity getCommodityService(int commodityType) {
-        if (commodityType == 1) return new CardCommodityService();
-        if (commodityType == 2) return new CouponCommodityService();
-        if (commodityType == 3) return new GoodsCommodityService();
+        if (commodityType == 1) return new CouponCommodityService();
+        if (commodityType == 2) return new GoodsCommodityService();
+        if (commodityType == 3) return new CardCommodityService();
         throw new RuntimeException("不存在的商品服务类型");
     }
 }

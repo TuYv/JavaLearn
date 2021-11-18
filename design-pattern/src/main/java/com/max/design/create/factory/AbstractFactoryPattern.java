@@ -1,9 +1,10 @@
 package com.max.design.create.factory;
 
-import com.max.learning.design_pattern.create.factory.product.ConcreteProduct11;
-import com.max.learning.design_pattern.create.factory.product.ConcreteProduct21;
-import com.max.learning.design_pattern.create.factory.product.Product;
-import com.max.learning.design_pattern.create.factory.product.Product2;
+
+import com.max.design.create.factory.product.ConcreteProduct11;
+import com.max.design.create.factory.product.ConcreteProduct21;
+import com.max.design.create.factory.product.Product;
+import com.max.design.create.factory.product.Product2;
 
 /**
  * @program: learning
