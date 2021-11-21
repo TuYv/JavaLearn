@@ -1,6 +1,7 @@
 package com.max.design.create.abstract_factory.bugstack.cuisine.impl;
 
 import com.max.design.create.abstract_factory.bugstack.CacheService;
+import com.max.design.create.abstract_factory.bugstack.ICacheAdapter;
 import com.max.design.create.abstract_factory.bugstack.RedisUtils;
 import java.util.concurrent.TimeUnit;
 
@@ -10,7 +11,7 @@ import java.util.concurrent.TimeUnit;
  * @description
  * @create 2021-11-18 22:58
  **/
-public class CacheServiceImpl implements CacheService {
+public class CacheServiceImpl implements ICacheAdapter {
 
     private RedisUtils redisUtils = new RedisUtils();
 
