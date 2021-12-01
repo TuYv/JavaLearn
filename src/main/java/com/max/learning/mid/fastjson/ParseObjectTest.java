@@ -1,16 +1,5 @@
 package com.max.learning.mid.fastjson;
 
-import ch.qos.logback.core.joran.spi.XMLUtil;
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.json.JSONConverter;
-import cn.hutool.json.JSONUtil;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.annotation.JSONField;
-import com.max.learning.mid.fastjson.ParseObjectTest.ParseObject.InnObject;
-import java.util.ArrayList;
-import java.util.List;
-import lombok.Data;
-
 /**
  * @program: learning
  * @description:
@@ -18,7 +7,7 @@ import lombok.Data;
  * @create: 2021-09-28 20:49
  **/
 public class ParseObjectTest {
-
+/*
     public static void main(String[] args) {
         ParseObject p = new ParseObject();
         List<InnObject> list = new ArrayList<>();
@@ -50,5 +39,5 @@ public class ParseObjectTest {
             String name;
             String score;
         }
-    }
+    }*/
 }
