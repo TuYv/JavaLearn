@@ -8,16 +8,16 @@
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://127.0.0.1:3306/itstack-demo-design?useUnicode=true"/>
+                <property name="url" value="jdbc:mysql://121.5.170.146:3306/lottery?useUnicode=true"/>
                 <property name="username" value="root"/>
-                <property name="password" value="123456"/>
+                <property name="password" value="ysyyrps!@#3EDC"/>
             </dataSource>
         </environment>
     </environments>
 
     <mappers>
-        <mapper resource="mapper/User_Mapper.xml"/>
-        <mapper resource="mapper/School_Mapper.xml"/>
+        <mapper resource="mapper/Activity_Mapper.xml"/>
+        <mapper resource="mapper/Strategy_Mapper.xml"/>
     </mappers>
 
 </configuration>

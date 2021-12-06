@@ -1,6 +1,7 @@
 package com.max.design.behavioral.mediator.mybatis;
 
 import com.alibaba.fastjson.JSON;
+import com.max.design.behavioral.mediator.po.Activity;
 import com.max.design.behavioral.mediator.po.User;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -27,8 +28,8 @@ class SqlSessionFactoryBuilderTest {
 
             SqlSession session = sqlMapper.openSession();
             try {
-                User user = session.selectOne("org.itstack.demo.design.dao.IUserDao.queryUserInfoById", 1L);
-                log.info("测试结果：{}", JSON.toJSONString(user));
+                Activity activity = session.selectOne("com.max.design.behavioral.mediator.dao.IActivityDao.queryActivityById", 100001);
+                log.info("测试结果：{}", JSON.toJSONString(activity));
             } finally {
                 session.close();
                 reader.close();

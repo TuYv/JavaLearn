@@ -30,6 +30,7 @@ public class SqlSessionFactoryBuilder {
             saxReader.setEntityResolver(new XMLMapperEntityResolver());
             Document document = saxReader.read(new InputSource(reader));
             Configuration configuration = parseConfiguration(document.getRootElement());
+            return new DefaultSqlSessionFactory(configuration);
         } catch (DocumentException e) {
             e.printStackTrace();
         }

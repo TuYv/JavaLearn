@@ -89,7 +89,7 @@ public class DefaultSqlSession implements SqlSession{
 
             while (resultSet.next()) {
                 T obj = (T) clazz.newInstance();
-                for (int i = 0; i < metaData.getColumnCount(); i++) {
+                for (int i = 1; i <= metaData.getColumnCount(); i++) {
                     Object value = resultSet.getObject(i);
                     String columnName = metaData.getColumnName(i);
                     //拼写实例中的set方法
