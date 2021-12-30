@@ -1,6 +1,7 @@
 package com.max.learning.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.max.learning.enums.ResultEnum;
 import lombok.Data;
 
 import java.util.Date;
@@ -14,4 +15,6 @@ public class TestDTO {
 
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss",timezone = "GMT+8")
     private Date time;
+
+    private ResultEnum resultEnum;
 }
