@@ -13,6 +13,6 @@ public class Context<T> {
         this.couponDiscount = couponDiscount;
     }
     BigDecimal discountAmount(T couponInfo, BigDecimal skuPrice) {
-        this.couponDiscount.discountAmount(couponInfo, skuPrice);
+        return this.couponDiscount.discountAmount(couponInfo, skuPrice);
     }
 }
