@@ -37,3 +37,7 @@ build/
 mvnw
 
 mvnw.cmd
+
+src/test/.DS_Store
+
+.DS_Store
