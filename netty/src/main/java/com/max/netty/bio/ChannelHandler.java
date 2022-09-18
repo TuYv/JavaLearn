@@ -27,7 +27,6 @@ public class ChannelHandler {
             out = socket.getOutputStream();
             out.write(msg.toString().getBytes(charset));
             out.flush();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
