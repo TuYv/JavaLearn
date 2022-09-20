@@ -32,6 +32,7 @@ public class NettyServer {
         } finally {
             childGroup.shutdownGracefully();
             parentGroup.shutdownGracefully();
+
         }
     }
 }
