@@ -3,6 +3,7 @@ package com.max.design.structure.adapter;
 /**
  * @author max
  * @description: 适配器模式
+ * 适配器模式分为类适配器和对象适配器, 类是直接继承使用, 对象是持有一个目标类的对象
  * @date 2021/8/13 17:26
  */
 public class AdapterPattern {
