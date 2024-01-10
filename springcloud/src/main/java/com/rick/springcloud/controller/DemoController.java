@@ -1,5 +1,6 @@
 package com.rick.springcloud.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DemoController {
 
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('admin')")
     public String hello() {
         return "hello world";
     }

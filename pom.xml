@@ -7,6 +7,7 @@
     <module>design-pattern</module>
     <module>netty</module>
     <module>springcloud</module>
+    <module>game</module>
   </modules>
   <parent>
         <groupId>org.springframework.boot</groupId>
